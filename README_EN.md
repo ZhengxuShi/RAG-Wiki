@@ -1,5 +1,11 @@
 # LLM Wiki × RAG: Structured Knowledge Retrieval-Augmented Generation
 
+<div align="center">
+
+**English** | [简体中文](README.md)
+
+</div>
+
 > Based on Andrej Karpathy's LLM Wiki methodology, combined with the engineering implementation of [nashsu/llm_wiki](https://github.com/nashsu/llm_wiki), we ported reusable modules to Python and adapted them to serve as a complementary retrieval path alongside traditional RAG, integrated into a Haystack-based retrieval pipeline.
 
 [![](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
