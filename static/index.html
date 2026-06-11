@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>RAG + Wiki 智能助手</title>
+    <link rel="stylesheet" href="/static/css/chat.css?v=5">
+    <script src="https://unpkg.com/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-layout" id="appLayout">
+        <!-- Left Conversation Panel / 左侧会话面板 -->
+        <aside class="conversation-panel" id="conversationPanel">
+            <div class="panel-header">对话记录</div>
+            <button class="new-chat-button" id="newConversationButton" onclick="createNewConversation()">新建对话</button>
+            <div class="conversation-list" id="conversationList"></div>
+        </aside>
+
+        <!-- Left Resizer / 左侧面板拖拽条 -->
+        <div class="layout-resizer" id="leftLayoutResizer" data-resizer="left" title="拖拽调整宽度"></div>
+
+        <!-- Center Chat Area / 中间聊天区域 -->
+        <main class="chat-container">
+            <header class="chat-header">
+                <span class="chat-header-title">RAG + Wiki 智能助手</span>
+                <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+            </header>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant welcome-message">
+                    <div class="message-content welcome-card">
+                        <div class="welcome-title">你好！我是 RAG+Wiki 智能助手</div>
+                        <div class="welcome-desc">可以帮您检索知识库并回答问题。请选择检索模式并开始提问。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <!-- Mode Segmented Control / 模式切换 -->
+                <div class="mode-segmented" id="modeSegmented">
+                    <button class="mode-seg-btn active" data-mode="rag">RAG</button>
+                    <button class="mode-seg-btn" data-mode="wiki">RAG + Wiki</button>
+                </div>
+
+                <!-- Image Upload Row / 图片上传 -->
+                <div class="upload-row">
+                    <label class="image-picker">
+                        <input type="file" id="imageInput" accept="image/*" onchange="handleImageChange(event)">
+                        <span>上传图片</span>
+                    </label>
+                    <div class="image-preview-wrap" id="imagePreviewWrap" style="display:none;">
+                        <img class="selected-image-preview" id="imagePreview" alt="图片预览">
+                        <span class="image-remove" onclick="clearImage()">×</span>
+                    </div>
+                </div>
+
+                <!-- Input Row / 输入行 -->
+                <div class="input-row">
+                    <input
+                        type="text"
+                        class="chat-input"
+                        id="chatInput"
+                        placeholder="请输入您的问题..."
+                        onkeypress="if(event.key === 'Enter') sendMessage()"
+                    >
+                    <button class="send-button" id="sendButton" onclick="sendMessage()">
+                        发送
+                    </button>
+                </div>
+            </div>
+
+            <!-- Wiki Config Bar / Wiki 配置栏 -->
+            <div class="wiki-config-bar" id="wikiConfigBar" style="display:none;">
+                <label>
+                    关联度阈值: <span id="relevanceValue">2.0</span>
+                </label>
+                <input type="range" id="relevanceSlider" min="0" max="10" step="0.5" value="2.0">
+            </div>
+        </main>
+
+        <!-- Right Resizer / 右侧面板拖拽条 -->
+        <div class="layout-resizer" id="rightLayoutResizer" data-resizer="right" title="拖拽调整宽度"></div>
+
+        <!-- Right Reference Panel / 右侧参考来源面板 -->
+        <aside class="reference-panel" id="referencePanel">
+            <div class="panel-header">参考来源</div>
+            <div class="reference-summary" id="referenceSummary">发送消息后将在此展示检索来源</div>
+            <div class="reference-body">
+                <div class="reference-content" id="referenceContent">
+                    <div class="reference-empty">发送问题后，这里会展示 RAG、Wiki 图谱和 Wiki 检索来源。</div>
+                </div>
+                <div class="reference-body-resizer" id="referenceBodyResizer" title="拖拽调整高度" style="display:none;"></div>
+                <div class="reference-graph" id="referenceGraph" style="display:none;">
+                    <div class="graph-nav" id="graphNav"></div>
+                    <div class="graph-viewport" id="graphViewport"></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Wiki 图谱独立放大面板 -->
+    <div class="wiki-panel" id="wikiPanel" style="display:none;">
+        <div class="wiki-panel-header">
+            <span>Wiki 知识图谱</span>
+            <button onclick="closeWikiPanel()">×</button>
+        </div>
+        <div class="wiki-clusters" id="wikiClusters">
+            <!-- 动态插入多个簇容器 -->
+        </div>
+    </div>
+
+    <!-- 节点内容弹层 -->
+    <div class="node-popup" id="nodePopup" style="display:none;">
+        <div class="popup-close" onclick="closeNodePopup()">×</div>
+        <div class="popup-title" id="popupTitle"></div>
+        <div class="popup-content" id="popupContent"></div>
+    </div>
+
+    <!-- 来源详情弹层 (RAG sources) -->
+    <div class="source-popup" id="sourcePopup" style="display:none;">
+        <div class="source-popup-header">
+            <span id="sourcePopupTitle">来源详情</span>
+            <button onclick="closeSourcePopup()">×</button>
+        </div>
+        <div class="source-popup-body" id="sourcePopupBody"></div>
+    </div>
+
+    <!-- Wiki 节点详情弹层 (Wikipedia-style) -->
+    <div class="wiki-node-modal" id="wikiNodeModal" style="display:none;">
+        <div class="wiki-node-box">
+            <div class="wiki-node-header">
+                <div class="wiki-node-header-top">
+                    <div class="wiki-node-title-wrap">
+                        <span class="wiki-node-type" id="wikiNodeType">concept</span>
+                        <span class="wiki-node-title" id="wikiNodeTitle">Node Title</span>
+                    </div>
+                    <button class="wiki-node-close" onclick="closeWikiNodeModal()">×</button>
+                </div>
+                <div class="wiki-node-breadcrumb" id="wikiNodeBreadcrumb"></div>
+            </div>
+            <div class="wiki-node-body" id="wikiNodeBody">
+                <div class="wiki-frontmatter-bar" id="wikiFrontmatterBar"></div>
+                <div class="wiki-node-content markdown-body" id="wikiNodeContent"></div>
+                <div class="wiki-related-section" id="wikiRelatedSection" style="display:none;">
+                    <div class="wiki-related-title">相关节点</div>
+                    <div class="wiki-related-cards" id="wikiRelatedCards"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/chat.js?v=6"></script>
+</body>
+</html>

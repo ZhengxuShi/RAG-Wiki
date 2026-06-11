@@ -1,0 +1,870 @@
+{
+  "1000.1st_retriever": {
+    "1000.param_meaning": "第一级检索。optimize_category值为one_from_scope时，代表从scope任选其一。逻辑认为当存在detail键，需要向下遍历，没有detail键认为是叶子节点",
+    "1001.value": "general",
+    "1002.is_optimize": 0,
+    "1003.optimize_category": "one_from_scope",
+    "1004.scope": [
+      "general",
+      "simple_keyword",
+      "graph"
+    ],
+    "1005.detail": {
+      "1000.general": {
+        "1000.param_meaning": "通用检索。optimize_category值为expanded_parameters时，默认没有scope键，detail键包含的所有子建都要遍历",
+        "1003.optimize_category": "expanded_parameters",
+        "1005.detail": {
+          "1000.indexing": {
+            "1000.param_meaning": "构建索引策略",
+            "1001.value": "none",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "one_from_scope",
+            "1004.scope": [
+              "none",
+              "enrich_doc_key",
+              "enrich_doc_summary"
+            ],
+            "1005.detail": {
+              "1000.embedding_similarity_function": {
+                "1000.param_meaning": "计算向量相似度的方法",
+                "1001.value": "cosine",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "cosine",
+                  "dot_product",
+                  "l2"
+                ]
+              },
+              "1001.db_path_url": {
+                "1000.param_meaning": "向量数据库url地址",
+                "1001.value": "http://YOUR_MILVUS_HOST:19530",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "str"
+              },
+              "1002.milvus_db_name": {
+                "1000.param_meaning": "向量数据库名称",
+                "1001.value": "Firmware",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "str"
+              },
+              "1003.milvus_collection_name": {
+                "1000.param_meaning": "表名称",
+                "1001.value": "bge_m3_wiki_demo100_v1",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "str"
+              }
+            }
+          },
+          "1001.query": {
+            "1000.param_meaning": "查询问题策略",
+            "1001.value": "none",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "one_from_scope",
+            "1004.scope": [
+              "none",
+              "query_hyde",
+              "query_language",
+              "query_association"
+            ]
+          },
+          "1002.retrieval": {
+            "1000.param_meaning": "问题检索策略",
+            "1001.value": "hybrid_retriever",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "one_from_scope",
+            "1004.scope": [
+              "embedding_retriever",
+              "sparse_embedding_retriever",
+              "hybrid_retriever"
+            ],
+            "1005.detail": {
+              "1000.embedding_retriever": {
+                "1000.param_meaning": "稠密向量检索相关配置",
+                "1003.optimize_category": "expanded_parameters",
+                "1005.detail": {
+                  "1000.embedding_model": {
+                    "1000.param_meaning": "embedding模型",
+                    "1001.value": "bge-m3",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "bge-m3",
+                      "bge-m3:latest",
+                      "bge-m3_local",
+                      "gte",
+                      "inf",
+                      "qwen3",
+                      "gte-1.5b",
+                      "gte-qwen2-1.5b",
+                      "gte-finetune",
+                      "gte-finetune-add",
+                      "gte-finetune-summary",
+                      "bge-finetune",
+                      "qwen3-finetune",
+                      "gte-finetune-api"
+                    ],
+                    "1005.detail": {
+                      "1000.embedding_dim": {
+                        "1000.param_meaning": "embedding的维度",
+                        "1001.value": 1024,
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          1024
+                        ]
+                      },
+                      "1001.embedder_model_url": {
+                        "1000.param_meaning": "embedding模型url",
+                        "1001.value": "http://YOUR_EMBEDDING_API/v1",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "str"
+                      },
+                      "1002.embedder_model_platform": {
+                        "1000.param_meaning": "embedding模型的平台",
+                        "1001.value": "openai",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          "openai",
+                          "ollama",
+                          "local_st"
+                        ]
+                      },
+                      "1003.timeout": {
+                        "1000.param_meaning": "embedding模型的超时时间",
+                        "1001.value": 300,
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "int",
+                        "1004.min": 150,
+                        "1004.max": 500,
+                        "1004.step": 50
+                      }
+                    }
+                  },
+                  "1001.top_k": {
+                    "1000.param_meaning": "检索召回的数量。optimize_category值为int或float时，存在最小值min,最大值max和步长step",
+                    "1001.value": 20,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 1,
+                    "1004.max": 20,
+                    "1004.step": 4
+                  }
+                }
+              },
+              "1001.sparse_embedding_retriever": {
+                "1000.param_meaning": "稀疏向量检索相关配置",
+                "1003.optimize_category": "expanded_parameters",
+                "1005.detail": {
+                  "1000.sparse_embedding_model": {
+                    "1000.param_meaning": "sparse_embedding模型",
+                    "1001.value": "bm42_openai",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "bm42",
+                      "bm42_openai",
+                      "all_miniLM_L6_v2_with_attentions"
+                    ],
+                    "1005.detail": {
+                      "1000.sparse_embedder_model_url": {
+                        "1000.param_meaning": "sparse_embedding模型url",
+                        "1001.value": "http://YOUR_EMBEDDING_API/v1",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "str"
+                      },
+                      "1001.sparse_embedder_model_platform": {
+                        "1000.param_meaning": "sparse_embedding模型的平台",
+                        "1001.value": "openai",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          "openai",
+                          "local_st"
+                        ]
+                      },
+                      "1002.sparse_timeout": {
+                        "1000.param_meaning": "sparse_embedding模型的超时时间",
+                        "1001.value": 300,
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "int",
+                        "1004.min": 150,
+                        "1004.max": 500,
+                        "1004.step": 50
+                      }
+                    }
+                  },
+                  "1001.top_k": {
+                    "1000.param_meaning": "检索召回的数量",
+                    "1001.value": 20,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 1,
+                    "1004.max": 20,
+                    "1004.step": 4
+                  }
+                }
+              },
+              "1002.sparse_retriever": {
+                "1000.param_meaning": "稀疏检索相关配置",
+                "1003.optimize_category": "expanded_parameters",
+                "1005.detail": {
+                  "1000.sparse_embedding_model": {
+                    "1000.param_meaning": "sparse模型",
+                    "1001.value": "bm25",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "bm25"
+                    ]
+                  },
+                  "1001.top_k": {
+                    "1000.param_meaning": "检索召回的数量",
+                    "1001.value": 20,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 1,
+                    "1004.max": 20,
+                    "1004.step": 4
+                  }
+                }
+              },
+              "1003.hybrid_retriever": {
+                "1000.param_meaning": "混合检索相关配置",
+                "1003.optimize_category": "expanded_parameters",
+                "1005.detail": {
+                  "1000.embedding_retriever": {
+                    "1000.param_meaning": "稠密向量检索相关配置",
+                    "1003.optimize_category": "expanded_parameters",
+                    "1005.detail": {
+                      "1000.embedding_model": {
+                        "1000.param_meaning": "embedding模型",
+                        "1001.value": "bge-m3",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          "bge-m3"
+                        ]
+                      }
+                    }
+                  },
+                  "1001.sparse_embedding_retriever": {
+                    "1000.param_meaning": "稀疏向量检索相关配置",
+                    "1003.optimize_category": "expanded_parameters",
+                    "1005.detail": {
+                      "1000.sparse_embedding_model": {
+                        "1000.param_meaning": "sparse_embedding模型",
+                        "1001.value": "bm42",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          "bm42"
+                        ]
+                      }
+                    }
+                  },
+                  "1002.sparse_retriever": {
+                    "1000.param_meaning": "稀疏检索相关配置",
+                    "1003.optimize_category": "expanded_parameters",
+                    "1005.detail": {
+                      "1000.sparse_embedding_model": {
+                        "1000.param_meaning": "sparse模型",
+                        "1001.value": "bm25",
+                        "1002.is_optimize": 0,
+                        "1003.optimize_category": "one_from_scope",
+                        "1004.scope": [
+                          "bm25"
+                        ]
+                      }
+                    }
+                  },
+                  "1003.top_k": {
+                    "1000.param_meaning": "检索召回的数量",
+                    "1001.value": 100,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 1,
+                    "1004.max": 30,
+                    "1004.step": 5
+                  },
+                  "1004.fusion_algorithms": {
+                    "1000.param_meaning": "融合算法",
+                    "1001.value": "RRF",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "RRF",
+                      "DBSF"
+                    ]
+                  },
+                  "1005.fusion_retriever": {
+                    "1000.param_meaning": "选取哪两个方法融合",
+                    "1001.value": "embedding_retriever+sparse_embedding_retriever",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "embedding_retriever+sparse_embedding_retriever",
+                      "embedding_retriever+sparse_retriever"
+                    ]
+                  },
+                  "1006.embedding_dim": {
+                    "1000.param_meaning": "embedding的维度",
+                    "1001.value": 1024,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      1024
+                    ]
+                  },
+                  "1007.filter_retriever_url": {
+                    "1000.param_meaning": "过滤检索接口的url",
+                    "1001.value": "https://YOUR_RETRIEVAL_API/endpoint",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "str"
+                  },
+                  "1008.hybrid_retrieval_url": {
+                    "1000.param_meaning": "混合检索接口的url",
+                    "1001.value": "https://YOUR_RETRIEVAL_API/endpoint",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "str"
+                  },
+                  "1009.retrieval_fetchType": {
+                    "1000.param_meaning": "混合检索的形式(local or api)",
+                    "1001.value": "local",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "str"
+                  }
+                }
+              },
+              "1004.use_multiRouteRetrieval": {
+                "1000.param_meaning": "是否启用多路检索。optimize_category值为bool时，默认没有scope键，detail键包含的所有子建都要遍历",
+                "1001.value": "False",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "bool"
+              }
+            }
+          },
+          "1003.use_reranker": {
+            "1000.param_meaning": "是否启用reranker模型。optimize_category值为bool时，默认没有scope键，detail键包含的所有子建都要遍历",
+            "1001.value": "True",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "bool",
+            "1005.detail": {
+              "1000.reranker_model": {
+                "1000.param_meaning": "reranker模型",
+                "1001.value": "openai-bge-reranker",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "bge-reranker",
+                  "gte_passage-ranking_multilingual-base",
+                  "bge-reranker-finetune",
+                  "openai-bge-reranker",
+                  "openai-bge-reranker-int4"
+                ],
+                "1005.detail": {
+                  "1000.rerank_url": {
+                    "1000.param_meaning": "rerank模型url",
+                    "1001.value": "http://YOUR_EMBEDDING_API/v1",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "http://YOUR_RERANKER_API/v1",
+                      "http://YOUR_EMBEDDING_API/v1",
+                      "http://127.0.0.1:20116/v1"
+                    ]
+                  },
+                  "1001.rerank_model_platform": {
+                    "1000.param_meaning": "rerank模型的平台",
+                    "1001.value": "openai",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "one_from_scope",
+                    "1004.scope": [
+                      "openai",
+                      "local_api",
+                      "local_st"
+                    ]
+                  },
+                  "1002.timeout": {
+                    "1000.param_meaning": "rerank模型的超时时间",
+                    "1001.value": 300,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 150,
+                    "1004.max": 500,
+                    "1004.step": 50
+                  }
+                }
+              },
+              "1001.reranker_top_k": {
+                "1000.param_meaning": "reranker返回的文档数量",
+                "1001.value": 30,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 1,
+                "1004.max": 100,
+                "1004.step": 1
+              },
+              "1002.reranker_score_threshold": {
+                "1000.param_meaning": "reranker返回的文档得分的阈值",
+                "1001.value": 0.5,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "float",
+                "1004.min": 0.1,
+                "1004.max": 0.8,
+                "1004.step": 0.1
+              }
+            }
+          },
+          "1004.llm_query": {
+            "1000.param_meaning": "问题处理中的llm模型",
+            "1001.value": "qwen2.5",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "one_from_scope",
+            "1004.scope": [
+              "qwen2:72b",
+              "deepseek-r1:32b-qwen-distill-q8_0",
+              "qwen2.5"
+            ],
+            "1005.detail": {
+              "1000.temperature": {
+                "1000.param_meaning": "llm模型的温度",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "float",
+                "1004.min": 0,
+                "1004.max": 0.4,
+                "1004.step": 0.1
+              },
+              "1001.num_predict": {
+                "1000.param_meaning": "llm模型输出的最大长度",
+                "1001.value": 400,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 200,
+                "1004.max": 1000,
+                "1004.step": 100
+              },
+              "1002.top_k": {
+                "1000.param_meaning": "降低llm产生无意义的可能性,值越低越保守",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 0,
+                "1004.max": 20,
+                "1004.step": 5
+              },
+              "1003.top_p": {
+                "1000.param_meaning": "与top-k一起使用,值越低越保守",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "float",
+                "1004.min": 0,
+                "1004.max": 0.5,
+                "1004.step": 0.1
+              },
+              "1004.model_url": {
+                "1000.param_meaning": "llm模型的url",
+                "1001.value": "http://YOUR_RERANKER_API/v1",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "str"
+              },
+              "1005.timeout": {
+                "1000.param_meaning": "llm模型的超时时间",
+                "1001.value": 300,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 150,
+                "1004.max": 500,
+                "1004.step": 50
+              },
+              "1006.model_platform": {
+                "1000.param_meaning": "llm模型的平台",
+                "1001.value": "openai",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "openai",
+                  "ollama"
+                ]
+              }
+            }
+          },
+          "1005.llm_enrich": {
+            "1000.param_meaning": "构建索引中的llm模型",
+            "1001.value": "qwen2.5",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "one_from_scope",
+            "1004.scope": [
+              "qwen2:72b",
+              "qwen2.5",
+              "deepseek-r1:32b-qwen-distill-q8_0"
+            ],
+            "1005.detail": {
+              "1000.temperature": {
+                "1000.param_meaning": "llm模型的温度",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "float",
+                "1004.min": 0,
+                "1004.max": 0.4,
+                "1004.step": 0.1
+              },
+              "1001.num_predict": {
+                "1000.param_meaning": "llm模型输出的最大长度",
+                "1001.value": 400,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 200,
+                "1004.max": 1000,
+                "1004.step": 100
+              },
+              "1002.top_k": {
+                "1000.param_meaning": "降低llm产生无意义的可能性,值越低越保守",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 0,
+                "1004.max": 20,
+                "1004.step": 5
+              },
+              "1003.top_p": {
+                "1000.param_meaning": "与top-k一起使用,值越低越保守",
+                "1001.value": 0,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "float",
+                "1004.min": 0,
+                "1004.max": 0.5,
+                "1004.step": 0.1
+              },
+              "1004.llm_enrich_model_url": {
+                "1000.param_meaning": "构建索引中的llm模型的url地址",
+                "1001.value": "http://YOUR_RERANKER_API/v1",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "str"
+              },
+              "1005.timeout": {
+                "1000.param_meaning": "构建索引中的llm模型的超时时间",
+                "1001.value": 300,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 150,
+                "1004.max": 500,
+                "1004.step": 50
+              },
+              "1006.model_platform": {
+                "1000.param_meaning": "构建索引中的llm模型的平台",
+                "1001.value": "openai",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "openai",
+                  "ollama"
+                ]
+              }
+            }
+          },
+          "1006.use_compressed": {
+            "1000.param_meaning": "是否启用压缩检索结果。",
+            "1001.value": "False",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "bool",
+            "1005.detail": {
+              "1000.retain_count": {
+                "1000.param_meaning": "检索压缩后，返回的最大结果个数",
+                "1001.value": 60,
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "int",
+                "1004.min": 10,
+                "1004.max": 30,
+                "1004.step": 5
+              }
+            }
+          },
+          "1007.tokenize": {
+            "1000.param_meaning": "tokenize计算器相关配置",
+            "1003.optimize_category": "expanded_parameters",
+            "1005.detail": {
+              "1000.rerank_tokenize": {
+                "1000.param_meaning": "rerank计算器相关配置",
+                "1001.value": "bge-reranker-v2-m3",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "bge-reranker-v2-m3"
+                ],
+                "1005.detail": {
+                  "1000.rerank_tokenize_url": {
+                    "1000.param_meaning": "rerank计算器url",
+                    "1001.value": "http://YOUR_TOKENIZE_API/v1/tokenize",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "str"
+                  },
+                  "1001.max_length": {
+                    "1000.param_meaning": "rerank计算器的最长token长度",
+                    "1001.value": 512,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 512,
+                    "1004.max": 8192,
+                    "1004.step": 50
+                  },
+                  "1002.timeout": {
+                    "1000.param_meaning": "rerank计算器的超时时间",
+                    "1001.value": 300,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 150,
+                    "1004.max": 500,
+                    "1004.step": 50
+                  }
+                }
+              },
+              "1001.embedding_tokenize": {
+                "1000.param_meaning": "embedding计算器相关配置",
+                "1001.value": "bge-m3",
+                "1002.is_optimize": 0,
+                "1003.optimize_category": "one_from_scope",
+                "1004.scope": [
+                  "bge-m3",
+                  "bge-negative-train"
+                ],
+                "1005.detail": {
+                  "1000.embedding_tokenize_url": {
+                    "1000.param_meaning": "embedding计算器url",
+                    "1001.value": "http://YOUR_TOKENIZE_API/v1/tokenize",
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "str"
+                  },
+                  "1001.max_length": {
+                    "1000.param_meaning": "embedding计算器的最长token长度",
+                    "1001.value": 8192,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 512,
+                    "1004.max": 8192,
+                    "1004.step": 50
+                  },
+                  "1002.timeout": {
+                    "1000.param_meaning": "embedding计算器的超时时间",
+                    "1001.value": 300,
+                    "1002.is_optimize": 0,
+                    "1003.optimize_category": "int",
+                    "1004.min": 150,
+                    "1004.max": 500,
+                    "1004.step": 50
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "1001.simple_keyword": {
+        "1000.param_meaning": "关键字检索",
+        "1003.optimize_category": "expanded_parameters"
+      },
+      "1002.graph": {
+        "1000.param_meaning": "知识图谱检索",
+        "1003.optimize_category": "expanded_parameters"
+      }
+    }
+  },
+  "1002.files_routing": {
+    "1000.param_meaning": "文件路由相关配置",
+    "1003.optimize_category": "expanded_parameters",
+    "1005.detail": {
+      "1000.embedder_model_url": {
+        "1000.param_meaning": "embedding模型url",
+        "1001.value": "http://YOUR_LLM_API/v1",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "str"
+      },
+      "1001.embedder_model": {
+        "1000.param_meaning": "embedding模型",
+        "1001.value": "bge-m3",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "one_from_scope",
+        "1004.scope": [
+          "bge-m3:latest",
+          "bge-m3"
+        ]
+      },
+      "1002.files_routing_path": {
+        "1000.param_meaning": "文件路由配置路径",
+        "1001.value": "./retriever/data/raw/files_routing.json",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "str"
+      },
+      "1003.stopword": {
+        "1000.param_meaning": "停用词文件路径",
+        "1001.value": "./retriever/data/raw/stopword.txt",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "str"
+      },
+      "1004.embedder_model_platform": {
+        "1000.param_meaning": "embedding模型的平台",
+        "1001.value": "openai",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "one_from_scope",
+        "1004.scope": [
+          "openai",
+          "ollama"
+        ]
+      },
+      "1005.timeout": {
+        "1000.param_meaning": "embedding模型的超时时间",
+        "1001.value": 300,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "int",
+        "1004.min": 150,
+        "1004.max": 500,
+        "1004.step": 50
+      },
+      "1006.use_routing": {
+        "1000.param_meaning": "是否启用路由策略",
+        "1001.value": "False",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool",
+        "1005.detail": {
+          "1000.first_router": {
+            "1000.param_meaning": "是否启用一级路由策略",
+            "1001.value": "True",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "bool"
+          }
+        }
+      }
+    }
+  },
+  "1003.enhanced_retrieval": {
+    "1000.param_meaning": "增强检索信息相关配置",
+    "1003.optimize_category": "expanded_parameters",
+    "1005.detail": {
+      "1000.use_concat_context": {
+        "1000.param_meaning": "是否使用拼接上下文",
+        "1001.value": "True",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool",
+        "1005.detail": {
+          "1000.doc_score": {
+            "1000.param_meaning": "文档得分阈值相关配置",
+            "1001.value": 1,
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "float",
+            "1004.min": 0.0,
+            "1004.max": 1.0,
+            "1004.step": 0.1
+          },
+          "1001.json_data_path": {
+            "1000.param_meaning": "比对的json文档路径相关配置",
+            "1001.value": "./data/raw_json/",
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "str"
+          }
+        }
+      },
+      "1001.use_table_recovery": {
+        "1000.param_meaning": "是否使用复原表格",
+        "1001.value": "True",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool",
+        "1005.detail": {
+          "1000.excel_score": {
+            "1000.param_meaning": "excel阈值参数",
+            "1001.value": 0.9,
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "float",
+            "1004.min": 0.1,
+            "1004.max": 1.0,
+            "1004.step": 0.1
+          },
+          "1001.doc_score": {
+            "1000.param_meaning": "文档得分阈值相关配置",
+            "1001.value": 0.2,
+            "1002.is_optimize": 0,
+            "1003.optimize_category": "float",
+            "1004.min": 0.0,
+            "1004.max": 1.0,
+            "1004.step": 0.1
+          }
+        }
+      },
+      "1002.use_homepage_context": {
+        "1000.param_meaning": "是否使用首页信息",
+        "1001.value": "False",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool"
+      }
+    }
+  },
+  "1007.llm_wiki": {
+    "1000.param_meaning": "LLM Wiki 构建与检索增强配置",
+    "1001.value": true,
+    "1002.is_optimize": 0,
+    "1003.optimize_category": "expanded_parameters",
+    "1005.detail": {
+      "1001.use_llm_wiki": {
+        "1000.param_meaning": "是否启用 LLM Wiki 构建",
+        "1001.value": true,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool"
+      },
+      "1002.wiki_config_path": {
+        "1000.param_meaning": "LLM Wiki 独立配置文件路径",
+        "1001.value": "llm_wiki/wiki_config.json",
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "str"
+      },
+      "1003.wiki_expansion_hops": {
+        "1000.param_meaning": "图谱扩展跳数",
+        "1001.value": 2,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "int",
+        "1004.min": 1,
+        "1004.max": 5,
+        "1004.step": 1
+      },
+      "1004.wiki_expansion_limit": {
+        "1000.param_meaning": "每节点扩展上限",
+        "1001.value": 3,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "int",
+        "1004.min": 1,
+        "1004.max": 10,
+        "1004.step": 1
+      },
+      "1005.wiki_expansion_min_relevance": {
+        "1000.param_meaning": "关联度阈值",
+        "1001.value": 2.0,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "float",
+        "1004.min": 0.0,
+        "1004.max": 10.0,
+        "1004.step": 0.5
+      },
+      "1006.use_louvain": {
+        "1000.param_meaning": "是否启用 Louvain 社区检测",
+        "1001.value": false,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool"
+      },
+      "1007.use_graph_insights": {
+        "1000.param_meaning": "是否启用图谱洞察",
+        "1001.value": false,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "bool"
+      },
+      "1008.wiki_search_top_k": {
+        "1000.param_meaning": "Wiki关键词检索种子数",
+        "1001.value": 20,
+        "1002.is_optimize": 0,
+        "1003.optimize_category": "int",
+        "1004.min": 1,
+        "1004.max": 100,
+        "1004.step": 1
+      }
+    }
+  }
+}

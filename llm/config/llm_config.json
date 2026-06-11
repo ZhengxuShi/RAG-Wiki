@@ -1,0 +1,42 @@
+{
+  "_COMMENT": "指定使用的接口，可选值：['Ollama','OPENAI']",
+  "_PROMPT_TEMPLATE_COMMENT": "大模型使用的提示词模板",
+  "PROMPT_TEMPLATE": "question: {{question}}\\n回答：",
+  "PORT": "OPENAI",
+  "Ollama": {
+    "_COMMENT": "指定使用的模型，可选值：['qwen2']",
+    "MODEL_NAME": "qwen2",
+    "qwen2": {
+      "_COMMENT": "Ollama 相关配置",
+      "MODEL": "qwen2:72b",
+      "URL": "http://127.0.0.1:11434",
+      "NUM_PREDICT": 1000,
+      "_TEMPERATURE_COMMENT": "与 GPT 一致，分别为纯文本生成和 RAG 生成的温度",
+      "GENERATION_ONLY_TEMPERATURE": 0,
+      "RAG_TEMPERATURE": 0
+    }
+  },
+  "OPENAI": {
+    "_COMMENT": "指定使用的模型，可选值：['qwen2.5','gpt']",
+    "MODEL_NAME": "qwen2.5",
+    "gpt": {
+      "_COMMENT": "OpenAI GPT 相关配置",
+      "MODEL": "gpt-4o-mini",
+      "API_KEY": "",
+      "BASE_URL": "https://YOUR_OPENAI_BASE_URL/v1",
+      "_TEMPERATURE_COMMENT": "生成文本时的温度值：GENERATION_ONLY_TEMPERATURE 适用于直接生成，RAG_TEMPERATURE 适用于检索增强（RAG）",
+      "GENERATION_ONLY_TEMPERATURE": 0,
+      "RAG_TEMPERATURE": 0
+    },
+    "qwen2.5": {
+      "_COMMENT": "Qwen2.5 相关配置",
+      "MODEL": "qwen2.5",
+      "API_KEY": "",
+      "BASE_URL": "http://127.0.0.1:13000/v1",
+      "TIMEOUT": 300,
+      "_TEMPERATURE_COMMENT": "生成文本时的温度值：GENERATION_ONLY_TEMPERATURE 适用于直接生成，RAG_TEMPERATURE 适用于检索增强（RAG）",
+      "GENERATION_ONLY_TEMPERATURE": 0,
+      "RAG_TEMPERATURE": 0
+    }
+  }
+}
